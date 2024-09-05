@@ -12,13 +12,13 @@
         - hibernate.target
         - hybrid-sleep.target
       changed_when: false # because it's not a real change and just temporary
-    - name: "Role: common"
-      ansible.builtin.include_role:
-        name: common
     - name: "Role: auto_update"
       ansible.builtin.include_role:
         name: auto_update
       when: "'auto_update' in group_names"
+    - name: "Role: common"
+      ansible.builtin.include_role:
+        name: common
     - name: "Role: vscodium"
       ansible.builtin.include_role:
         name: vscodium

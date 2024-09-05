@@ -1,16 +1,25 @@
+- name: Remove dvd-repository remains inside /etc/apt/sources.list
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
+    regexp: '^(deb cdrom:.+)'
+    state: absent
 - name: Install basic packages
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
+    update_cache: true
   with_items:
     - tmux
     - htop
-- name: Install well-known SSH keys into root
+- name: Install well-known SSH keys into users
   ansible.posix.authorized_key:
-    user: root
+    user: "{{ item }}"
     state: present
     exclusive: true # just to prevent additional keys from appearing, without previous notice
     key: "{{ lookup('file', 'authorized_keys') }}"
+  with_items:
+    - root
+    - user
 - name: Install custom MOTD
   ansible.builtin.template:
     src: "templates/motd.j2"
@@ -31,3 +40,15 @@
     state: present
     regexp: '^#?PasswordAuthentication.+'
     line: 'PasswordAuthentication no'
+- name: Copy over the background image
+  ansible.builtin.copy:
+    src: "files/background.png"
+    dest: "/usr/share/backgrounds/background.png"
+    owner: root
+    group: root
+    mode: "0444"
+- name: Set the background image
+  become: true # for this, we really need to become root (to switch back to the user)
+  become_user: user
+  ansible.builtin.command:
+    cmd: "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/background.png"
