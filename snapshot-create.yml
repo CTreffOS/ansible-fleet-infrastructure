@@ -10,7 +10,7 @@
         src: /etc/timeshift/timeshift.json
       register: imported_json
 
-    - name: Include all user files (will automatically be restored)
+    - name: Include all user files (so they will be restored)
       ansible.builtin.set_fact:
         imported_json: "{{ imported_json.content | b64decode | from_json | combine({'exclude': ['+ /home/user/**', '+ /root/**']}) }}"
 
@@ -27,18 +27,17 @@
         cmd: "timeshift --scripted --snapshot-device /dev/mapper/{{ inventory_hostname }}--vg-root --create --comment by-ansible --yes"
         creates: /timeshift/snapshots/by-ansible
 
-    - name: List (new) snapshots
+    - name: List new snapshots
       ansible.builtin.shell:
-        cmd: ls -1 | grep 20 # because we have no idea how the folder is named... Just list all and grep for the year
+        cmd: ls -td1 *
         chdir: /timeshift/snapshots
-        creates: /timeshift/snapshots/by-ansible
         executable: /bin/bash
-      register: contents
+      register: new_snapshots
 
     - name: Move snapshot
       ansible.builtin.shell:
-        cmd: mv {{ contents["stdout_lines"][0].strip() }} by-ansible
+        cmd: mv {{ new_snapshots["stdout_lines"][0].strip() }} by-ansible
         chdir: /timeshift/snapshots
         creates: /timeshift/snapshots/by-ansible
         executable: /bin/bash
-      when: contents["stdout_lines"] | length > 0
+      when: new_snapshots["stdout_lines"] | length > 0
