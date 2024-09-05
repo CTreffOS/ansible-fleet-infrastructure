@@ -1,0 +1,16 @@
+- name: Block system power control
+  hosts: all
+  become: true
+  tasks:
+    - name: Block system power control
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      with_items:
+        - sleep.target
+        - suspend.target
+        - hibernate.target
+        - hybrid-sleep.target
+        - reboot.target
+        - poweroff.target
+      changed_when: false # because it's not a real change and just temporary ;)

@@ -1,5 +1,8 @@
-- name: "Import stay-awake playbook"
-  ansible.builtin.import_playbook: block-sleep.yml
+- name: Import snapshot-restore playbook
+  ansible.builtin.import_playbook: snapshot-restore.yml
+
+- name: Import stay-awake playbook
+  ansible.builtin.import_playbook: power-block.yml
 
 - name: Site Playbook # using only one playbook for all hosts to profit from Ansible's strategy "free"
   hosts: all
@@ -16,13 +19,9 @@
       ansible.builtin.include_role:
         name: vscodium
       when: "'vscodium' in group_names"
-    - name: Unblock system sleep
-      ansible.builtin.systemd:
-        name: "{{ item }}"
-        masked: false
-      with_items:
-        - sleep.target
-        - suspend.target
-        - hibernate.target
-        - hybrid-sleep.target
-      changed_when: false # because it's not a real change and just temporary
+
+- name: Import sleep-allowed playbook
+  ansible.builtin.import_playbook: power-unblock.yml
+
+- name: Import snapshot-create playbook
+  ansible.builtin.import_playbook: snapshot-create.yml
