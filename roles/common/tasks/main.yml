@@ -11,6 +11,7 @@
   with_items:
     - tmux
     - htop
+    - vim
 - name: Install well-known SSH keys into users
   ansible.posix.authorized_key:
     user: "{{ item }}"
@@ -42,8 +43,8 @@
     line: 'PasswordAuthentication no'
 - name: Copy over the background image
   ansible.builtin.copy:
-    src: "files/background.png"
-    dest: "/usr/share/backgrounds/background.png"
+    src: "files/background.jpg"
+    dest: "/usr/share/backgrounds/background.jpg"
     owner: root
     group: root
     mode: "0444"
@@ -51,4 +52,20 @@
   become: true # for this, we really need to become root (to switch back to the user)
   become_user: user
   ansible.builtin.command:
-    cmd: "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/background.png"
+    cmd: "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/background.jpg"
+- name: Install development packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - python3
+    - build-essential
+    - curl
+- name: Remove problematic packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - brltty
