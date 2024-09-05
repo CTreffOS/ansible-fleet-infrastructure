@@ -1,0 +1,44 @@
+- name: Cleanup snapshot first
+  ansible.builtin.import_playbook: snapshot-delete.yml
+
+- name: Create new snapshot
+  hosts: snapshotted
+  become: true
+  tasks:
+    - name: Load timeshift.json
+      ansible.builtin.slurp:
+        src: /etc/timeshift/timeshift.json
+      register: imported_json
+
+    - name: Include all user files (will automatically be restored)
+      ansible.builtin.set_fact:
+        imported_json: "{{ imported_json.content | b64decode | from_json | combine({'exclude': ['+ /home/user/**', '+ /root/**']}) }}"
+
+    - name: Write timeshift.json
+      ansible.builtin.copy:
+        content: "{{ imported_json | to_nice_json }}"
+        dest: /etc/timeshift/timeshift.json
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Create snapshot
+      ansible.builtin.command:
+        cmd: "timeshift --scripted --snapshot-device /dev/mapper/{{ inventory_hostname }}--vg-root --create --comment by-ansible --yes"
+        creates: /timeshift/snapshots/by-ansible
+
+    - name: List (new) snapshots
+      ansible.builtin.shell:
+        cmd: ls -1 | grep 20 # because we have no idea how the folder is named... Just list all and grep for the year
+        chdir: /timeshift/snapshots
+        creates: /timeshift/snapshots/by-ansible
+        executable: /bin/bash
+      register: contents
+
+    - name: Move snapshot
+      ansible.builtin.shell:
+        cmd: mv {{ contents["stdout_lines"][0].strip() }} by-ansible
+        chdir: /timeshift/snapshots
+        creates: /timeshift/snapshots/by-ansible
+        executable: /bin/bash
+      when: contents["stdout_lines"] | length > 0

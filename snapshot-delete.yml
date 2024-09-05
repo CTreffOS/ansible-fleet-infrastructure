@@ -1,0 +1,13 @@
+- name: Delete snapshot
+  hosts: snapshotted
+  become: true
+  tasks:
+    - name: Check if snapshot exists
+      ansible.builtin.stat:
+        path: /timeshift/snapshots/by-ansible
+      register: check_status
+    - name: Cleanup snapshot
+      ansible.builtin.command:
+        cmd: "timeshift --scripted --snapshot-device /dev/mapper/{{ inventory_hostname }}--vg-root --delete --snapshot by-ansible --yes"
+      when: check_status.stat.exists
+      changed_when: true # it existed before, now it's gone

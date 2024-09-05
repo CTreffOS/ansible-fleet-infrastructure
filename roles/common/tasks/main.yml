@@ -54,7 +54,7 @@
   ansible.builtin.command:
     cmd: "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/background.jpg"
   changed_when: false # ignore this change, it's just a setting
-- name: Install development packages
+- name: Install packages
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
@@ -64,6 +64,7 @@
     - build-essential
     - curl
     - flatpak
+    - timeshift # needed for snapshots
 - name: Add flathub repository
   ansible.builtin.command:
     cmd: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo

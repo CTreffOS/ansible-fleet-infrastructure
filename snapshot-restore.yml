@@ -1,0 +1,22 @@
+- name: Restore snapshot
+  hosts: snapshotted
+  become: true
+  tasks:
+    - name: Check if snapshot exists
+      ansible.builtin.stat:
+        path: /timeshift/snapshots/by-ansible
+      register: check_status
+    - name: Start snapshot restore in background
+      ansible.builtin.shell:
+        cmd: "yes '' | timeshift --scripted --snapshot-device /dev/mapper/{{ inventory_hostname }}--vg-root --restore --snapshot by-ansible --yes"
+        executable: /bin/bash
+      # start timeshift restore in background, as it will reboot the system by itself
+      async: 1200 # 20 minutes should be enough
+      poll: 0 # if the command fails, we will get stuck here
+      when: check_status.stat.exists
+      changed_when: true # we always change something here
+    - name: Wait for system reboot # wait for the restore and reboot the system
+      ansible.builtin.reboot:
+        reboot_command: "sleep 1" # we will not trigger the reboot ourselves, as timeshift will do it
+        msg: "Reboot by timeshift every moment now..."
+        connect_timeout: 10 # to allow faster reconnects
