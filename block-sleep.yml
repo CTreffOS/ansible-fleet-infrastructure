@@ -1,0 +1,14 @@
+- name: Block system sleep
+  hosts: all
+  become: true
+  tasks:
+    - name: Block system sleep
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      with_items:
+        - sleep.target
+        - suspend.target
+        - hibernate.target
+        - hybrid-sleep.target
+      changed_when: false # because it's not a real change and just temporary ;)

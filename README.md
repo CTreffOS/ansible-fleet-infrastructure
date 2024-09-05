@@ -16,6 +16,12 @@ ansible -m ping all # just to make you can reach them all
 ## Usage
 ```bash
 ansible-playbook site.yml --ask-become-pass
+```
+
+### Block standby (during rollouts)
+```bash
+ansible-playbook block-sleep.yml --ask-become-pass
+```
 
 # Contribution guidelines
 * Never use `run_once: true`, because due to the strategy `free`, the task may be completed multiple times on different hosts, as they may start at different point of time.

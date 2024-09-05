@@ -1,17 +1,10 @@
+- name: "Import stay-awake playbook"
+  ansible.builtin.import_playbook: block-sleep.yml
+
 - name: Site Playbook # using only one playbook for all hosts to profit from Ansible's strategy "free"
   hosts: all
   become: true
   tasks:
-    - name: Block system sleep
-      ansible.builtin.systemd:
-        name: "{{ item }}"
-        masked: true
-      with_items:
-        - sleep.target
-        - suspend.target
-        - hibernate.target
-        - hybrid-sleep.target
-      changed_when: false # because it's not a real change and just temporary
     - name: "Role: auto_update"
       ansible.builtin.include_role:
         name: auto_update
