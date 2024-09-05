@@ -1,0 +1,33 @@
+- name: Install basic packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - tmux
+    - htop
+- name: Install well-known SSH keys into root
+  ansible.posix.authorized_key:
+    user: root
+    state: present
+    exclusive: true # just to prevent additional keys from appearing, without previous notice
+    key: "{{ lookup('file', 'authorized_keys') }}"
+- name: Install custom MOTD
+  ansible.builtin.template:
+    src: "templates/motd.j2"
+    dest: "/etc/update-motd.d/90-custom"
+    owner: root
+    group: root
+    mode: "0555"
+- name: Empty the system-default MOTD
+  ansible.builtin.copy:
+    content: ""
+    dest: "/etc/motd"
+    owner: root
+    group: root
+    mode: "0444"
+- name: Block password authentication for SSH # because we are using so unsecure passwords :P
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?PasswordAuthentication.+'
+    line: 'PasswordAuthentication no'

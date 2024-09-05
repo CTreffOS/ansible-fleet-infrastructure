@@ -1,0 +1,14 @@
+- name: Install vscodium repository signing key
+  ansible.builtin.apt_key:
+    url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+    keyring: /usr/share/keyrings/vscodium.gpg
+- name: Install vscodium repository
+  ansible.builtin.copy:
+    content: 'deb [ signed-by=/usr/share/keyrings/vscodium.gpg ] https://download.vscodium.com/debs vscodium main'
+    dest: /etc/apt/sources.list.d/vscodium.list
+    mode: "0444"
+- name: Install vscodium
+  ansible.builtin.apt:
+    name: codium
+    state: present
+    update_cache: true

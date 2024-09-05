@@ -1,0 +1,13 @@
+#!/bin/sh
+cat << EOF
+=========================================================
+         ⚠️  This system is managed by Ansible  ⚠️
+Changes you make may be overwritten. If you want to learn
+more or checkout the playbooks themselves, visit:
+ (repository url not known yet)
+
+Inventory Name: {{ inventory_hostname }}
+Member of Groups: {{ group_names | join(', ') }}
+Last Played: {{ template_run_date }}
+=========================================================
+EOF

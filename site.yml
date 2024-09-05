@@ -1,0 +1,35 @@
+- name: Site Playbook # using only one playbook for all hosts to profit from Ansible's strategy "free"
+  hosts: all
+  become: true
+  tasks:
+    - name: Block system sleep
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      with_items:
+        - sleep.target
+        - suspend.target
+        - hibernate.target
+        - hybrid-sleep.target
+      changed_when: false # because it's not a real change and just temporary
+    - name: "Role: common"
+      ansible.builtin.include_role:
+        name: common
+    - name: "Role: auto_update"
+      ansible.builtin.include_role:
+        name: auto_update
+      when: "'auto_update' in group_names"
+    - name: "Role: vscodium"
+      ansible.builtin.include_role:
+        name: vscodium
+      when: "'vscodium' in group_names"
+    - name: Unblock system sleep
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: false
+      with_items:
+        - sleep.target
+        - suspend.target
+        - hibernate.target
+        - hybrid-sleep.target
+      changed_when: false # because it's not a real change and just temporary

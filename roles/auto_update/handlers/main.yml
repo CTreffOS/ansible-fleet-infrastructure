@@ -1,0 +1,4 @@
+- name: Reboot system
+  ansible.builtin.reboot:
+    reboot_timeout: 3600
+    msg: "Reboot initiated by Ansible for system updates"

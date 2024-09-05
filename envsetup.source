@@ -1,0 +1,3 @@
+export ANSIBLE_STRATEGY=free
+export ANSIBLE_NOCOWS=True
+export ANSIBLE_INVENTORY=$(pwd)/hosts

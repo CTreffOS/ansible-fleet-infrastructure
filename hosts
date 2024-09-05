@@ -1,0 +1,10 @@
+ctreffos[00:09]
+
+[vscodium]
+ctreffos[00:09]
+
+[auto_update]
+ctreffos[00:09]
+
+[all:vars]
+ansible_user=user
