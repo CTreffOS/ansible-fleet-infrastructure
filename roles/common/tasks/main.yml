@@ -71,7 +71,7 @@
 - name: Remove problematic packages
   ansible.builtin.apt:
     name: "{{ item }}"
-    state: present
+    state: absent
     update_cache: true
   with_items:
     - brltty
