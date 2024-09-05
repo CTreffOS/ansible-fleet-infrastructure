@@ -53,6 +53,7 @@
   become_user: user
   ansible.builtin.command:
     cmd: "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/background.jpg"
+  changed_when: false # ignore this change, it's just a setting
 - name: Install development packages
   ansible.builtin.apt:
     name: "{{ item }}"
@@ -62,6 +63,11 @@
     - python3
     - build-essential
     - curl
+    - flatpak
+- name: Add flathub repository
+  ansible.builtin.command:
+    cmd: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  changed_when: false # subsequent changes, change nothing
 - name: Remove problematic packages
   ansible.builtin.apt:
     name: "{{ item }}"
