@@ -32,6 +32,7 @@
         cmd: ls -td1 *
         chdir: /timeshift/snapshots
         executable: /bin/bash
+      changed_when: false
       register: new_snapshots
 
     - name: Move snapshot
