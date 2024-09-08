@@ -13,15 +13,18 @@ ssh-copy-id user@ctreffosXX
 ansible -m ping all # just to make you can reach them all
 ```
 
-## Usage
+# Usage
 ```bash
 ansible-playbook site.yml --ask-become-pass
 ```
 
-### Block standby (during rollouts)
+## Block standby (during rollouts)
 ```bash
 ansible-playbook block-sleep.yml --ask-become-pass
 ```
+
+## Troubleshooting
+The inventory is using the mDNS advertised hostnames of the machines. While this saves us from configureing the inventovry with fixed IPv4 addresses, it may lead to problems, if the mDNS/WiFi-connection is not working properly. I would recommend you to start with the `power-block.yml`-playbook and rerun it until all machines are reachable.
 
 # Contribution guidelines
 * Never use `run_once: true`, because due to the strategy `free`, the task may be completed multiple times on different hosts, as they may start at different point of time.
