@@ -16,3 +16,11 @@
         dest: ctreffos-pixelflut
         version: main
       when: '"pixelflut_2024" in group_names'
+    - name: Create server ip in file
+      become: true
+      become_user: user
+      ansible.builtin.copy:
+        content: '0.0.0.0' # if you want to change the server ip, change this line
+        dest: ctreffos-pixelflut/server_ip.txt
+        mode: "0444" # read-only
+      when: '"pixelflut_2024" in group_names'
