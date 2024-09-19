@@ -20,7 +20,7 @@ ansible-playbook site.yml --ask-become-pass
 
 ## Block standby (during rollouts)
 ```bash
-ansible-playbook block-sleep.yml --ask-become-pass
+ansible-playbook power-block.yml --ask-become-pass
 ```
 
 ## Troubleshooting
