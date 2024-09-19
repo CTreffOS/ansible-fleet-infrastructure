@@ -60,6 +60,7 @@
     state: present
     update_cache: true
   with_items:
+    - git
     - python3
     - build-essential
     - curl
