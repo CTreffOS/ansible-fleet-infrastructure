@@ -1,0 +1,19 @@
+- name: Restore snapshot
+  hosts: all
+  become: true
+  tasks:
+    - name: Clone the client repo
+      become: true
+      become_user: user
+      ansible.builtin.git:
+        repo: 'https://github.com/hjanott/ctreffos-pixelflut.git'
+        dest: ctreffos-pixelflut
+        version: main
+      when: '"pixelflut_2024" in group_names'
+    - name: Remove client repo
+      become: true
+      become_user: user
+      ansible.builtin.file:
+        path: ctreffos-pixelflut
+        state: absent
+      when: '"pixelflut_2024" not in group_names'

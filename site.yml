@@ -25,3 +25,6 @@
 
 - name: Import snapshot-create playbook
   ansible.builtin.import_playbook: snapshot-create.yml
+
+- name: Import pixelflut 2024 playbook
+  ansible.builtin.import_playbook: pixelflut-2024.yml
