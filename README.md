@@ -28,3 +28,4 @@ The inventory is using the mDNS advertised hostnames of the machines. While this
 
 # Contribution guidelines
 * Never use `run_once: true`, because due to the strategy `free`, the task may be completed multiple times on different hosts, as they may start at different point of time.
+* Never use reboot or other power actions during a run - as `power-block.yml` will retrict them and may cause the playbook to get stuck.

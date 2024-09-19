@@ -2,4 +2,3 @@
   ansible.builtin.apt:
     upgrade: dist
     update_cache: true
-  notify: Reboot system
