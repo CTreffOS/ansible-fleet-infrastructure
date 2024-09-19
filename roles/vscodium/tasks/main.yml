@@ -16,5 +16,8 @@
   become: true # for this, we really need to become root (to switch back to the user)
   become_user: user
   ansible.builtin.command:
-    cmd: "codium --install-extension ms-python.python"
+    cmd: "codium --install-extension {{ item }}"
   changed_when: false # ignore this change, ias we cannot check if the extension is already installed
+  with_items:
+    - ms-python.python
+    - alefragnani.bookmarks
