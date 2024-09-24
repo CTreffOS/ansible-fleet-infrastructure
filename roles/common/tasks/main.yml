@@ -68,7 +68,7 @@
     - timeshift # needed for snapshots
     - avahi-daemon # for better dynamic discovery
 - name: Configure zeroconf ssh
-  copy:
+  ansible.builtin.copy:
     src: ssh.xml
     dest: /etc/avahi/services/ssh.service
     mode: "0444"
