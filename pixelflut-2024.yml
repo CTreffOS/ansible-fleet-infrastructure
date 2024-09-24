@@ -1,4 +1,4 @@
-- name: Restore snapshot
+- name: Install Pixelflut 2024 repository
   hosts: all
   become: true
   tasks:
@@ -12,7 +12,7 @@
       become: true
       become_user: user
       ansible.builtin.git:
-        repo: 'https://github.com/hjanott/ctreffos-pixelflut.git'
+        repo: "https://github.com/hjanott/ctreffos-pixelflut.git"
         dest: ctreffos-pixelflut
         version: main
       when: '"pixelflut_2024" in group_names'
