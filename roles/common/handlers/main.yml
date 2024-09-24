@@ -1,0 +1,5 @@
+- name: Enable avahi-daemon service and reload it
+  systemd:
+    name: avahi-daemon
+    enabled: yes
+    state: reloaded
