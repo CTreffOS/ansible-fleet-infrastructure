@@ -1,5 +1,9 @@
 - name: Enable avahi-daemon service and reload it
-  systemd:
+  ansible.builtin.systemd:
     name: avahi-daemon
-    enabled: yes
+    enabled: true
     state: reloaded
+- name: Restart network-manager
+  ansible.builtin.systemd:
+    name: NetworkManager
+    state: restarted

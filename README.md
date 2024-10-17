@@ -6,8 +6,15 @@ As the very first step, you have to install your own key onto the machines (hope
 ```bash
 ssh-copy-id user@ctreffosXX
 ```
+Then take a look into the `hosts` file, which details the specific group membership of the machines. It is strongly recommended to add the `secondary_address` property to the new device, as we have seen mDNS failures way too often. If you use this, you have to assign your own machine a static address inside the `10.13.37.0/24` subnet.
 
 ## Preperation
+Create a file `secrets.source` and fill it with the following content:
+```bash
+export WIFI_SSID=<set-your-value-here>
+export WIFI_PASSWORD=<set-your-value-here>
+```
+...then source it:
 ```bash
 . envsetup.source # to configure which inventory to use
 ansible -m ping all # just to make you can reach them all

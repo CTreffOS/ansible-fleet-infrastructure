@@ -90,3 +90,39 @@
     creates: /etc/timeshift/timeshift.json
   register: check_status
   failed_when: check_status.rc > 1 # 1 means no snapshots
+    cmd: "timeshift --scripted --snapshot-device /dev/mapper/{{ inventory_hostname }}--vg-root --list"
+    creates: /etc/timeshift/timeshift.json
+  register: check_status
+  failed_when: check_status.rc > 1 # 1 means no snapshots
+- name: Install WiFi connection profile (with secondary address)
+  community.general.nmcli:
+    type: wifi
+    conn_name: by-ansible
+    # conn_reload: true # my Ansible is too old...
+    ifname: wlp4s0
+    ssid: "{{ lookup('env', 'WIFI_SSID') }}"
+    wifi_sec:
+      key-mgmt: wpa-psk
+      psk: "{{ lookup('env', 'WIFI_PASSWORD') }}"
+    ip4:
+      - "{{ secondary_address }}/24"
+    method4: auto
+    autoconnect: true
+    state: present
+  when: secondary_address is defined
+  notify: Restart network-manager
+- name: Install WiFi connection profile
+  community.general.nmcli:
+    type: wifi
+    conn_name: by-ansible
+    # conn_reload: true # my Ansible is too old...
+    ifname: wlp4s0
+    ssid: "{{ lookup('env', 'WIFI_SSID') }}"
+    wifi_sec:
+      key-mgmt: wpa-psk
+      psk: "{{ lookup('env', 'WIFI_PASSWORD') }}"
+    method4: auto
+    autoconnect: true
+    state: present
+  when: not (secondary_address is defined)
+  notify: Restart network-manager
