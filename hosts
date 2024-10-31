@@ -10,7 +10,7 @@ ctreffos03 secondary_address=10.13.37.103 ansible_host=10.13.37.103
 ctreffos04 secondary_address=10.13.37.104 ansible_host=10.13.37.104
 ctreffos05 secondary_address=10.13.37.105 ansible_host=10.13.37.105
 ctreffos06 secondary_address=10.13.37.106 ansible_host=10.13.37.106
-ctreffos07 secondary_address=10.13.37.107 ansible_host=10.13.37.107
+ctreffos07 secondary_address=10.13.37.107 ansible_host=10.13.37.107 keyboard_variant=
 ctreffos08 secondary_address=10.13.37.108 ansible_host=10.13.37.108
 ctreffos09 secondary_address=10.13.37.109 ansible_host=10.13.37.109
 
@@ -28,3 +28,5 @@ ctreffos[00:09]
 
 [all:vars]
 ansible_user=user
+keyboard_layout=de
+keyboard_variant=e2

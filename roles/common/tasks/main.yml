@@ -90,6 +90,25 @@
     creates: /etc/timeshift/timeshift.json
   register: check_status
   failed_when: check_status.rc > 1 # 1 means no snapshots
+- name: Configure system keyboard to be layout de
+  ansible.builtin.lineinfile:
+    path: /etc/default/keyboard
+    regexp: "^XKBLAYOUT.+"
+    line: "XKBLAYOUT=\"{{ keyboard_layout }}\""
+  when: keyboard_layout is defined
+- name: Configure system keyboard to be variant e2 # e2 moves the missing </>/|-keys to ALT+GR+2/3/^
+  ansible.builtin.lineinfile:
+    path: /etc/default/keyboard
+    regexp: "^XKBVARIANT.+"
+    line: "XKBVARIANT=\"{{ keyboard_variant }}\""
+  when: keyboard_variant is defined
+- name: Configure user keyboard layout and variant to be de and e2
+  ansible.builtin.command:
+    cmd: "gsettings set org.gnome.desktop.input-sources sources \"[('xkb', '{{ keyboard_layout }}{% if keyboard_variant is defined %}+{{ keyboard_variant }}{% endif %}')]\""
+  become: true
+  become_user: user
+  changed_when: false # ignore this change, it's just a setting
+  when: keyboard_layout is defined
 - name: Install WiFi connection profile (with secondary address)
   community.general.nmcli:
     type: wifi
