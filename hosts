@@ -3,16 +3,16 @@ ctreffos[00:09]
 ; The secondary network is an additional ipv4 address assigned with the activation of the devices wlan.
 ; You may specify a static IPv4 with the secondary_address-parameter. AFTER a sucessful provisioning
 ; of the playbook, you may then override the address Ansible uses by setting the ansible_host parameter.
-ctreffos00 secondary_address=10.13.37.100 ansible_host=ctreffos00.lan
-ctreffos01 secondary_address=10.13.37.101 ansible_host=ctreffos01.lan
+ctreffos00 secondary_address=10.13.37.100 ansible_host=10.13.37.100
+ctreffos01 secondary_address=10.13.37.101 ansible_host=10.13.37.101
 ctreffos02 secondary_address=10.13.37.102 ansible_host=10.13.37.102
-ctreffos03 secondary_address=10.13.37.103 ansible_host=ctreffos03.lan
-ctreffos04 secondary_address=10.13.37.104 ansible_host=ctreffos04.lan
-ctreffos05 secondary_address=10.13.37.105 ansible_host=ctreffos05.lan
-ctreffos06 secondary_address=10.13.37.106 ansible_host=ctreffos06.lan
-ctreffos07 secondary_address=10.13.37.107 ansible_host=ctreffos07.lan
-ctreffos08 secondary_address=10.13.37.108 ansible_host=ctreffos08.lan
-ctreffos09 secondary_address=10.13.37.109 ansible_host=ctreffos09.lan
+ctreffos03 secondary_address=10.13.37.103 ansible_host=10.13.37.103
+ctreffos04 secondary_address=10.13.37.104 ansible_host=10.13.37.104
+ctreffos05 secondary_address=10.13.37.105 ansible_host=10.13.37.105
+ctreffos06 secondary_address=10.13.37.106 ansible_host=10.13.37.106
+ctreffos07 secondary_address=10.13.37.107 ansible_host=10.13.37.107
+ctreffos08 secondary_address=10.13.37.108 ansible_host=10.13.37.108
+ctreffos09 secondary_address=10.13.37.109 ansible_host=10.13.37.109
 
 [vscodium]
 ctreffos[00:09]
