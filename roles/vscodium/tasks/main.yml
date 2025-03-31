@@ -1,22 +1,25 @@
 - name: Install vscodium repository signing key
-  ansible.builtin.apt_key:
+  ansible.builtin.file:
     url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
-    keyring: /usr/share/keyrings/vscodium.gpg
+    state: absent
 - name: Install vscodium repository
-  ansible.builtin.copy:
-    content: 'deb [ signed-by=/usr/share/keyrings/vscodium.gpg ] https://download.vscodium.com/debs vscodium main'
+  ansible.builtin.file:
     dest: /etc/apt/sources.list.d/vscodium.list
-    mode: "0444"
-- name: Install vscodium
+    state: absent
+- name: Remove native installed vscodium
   ansible.builtin.apt:
     name: codium
-    state: present
-    update_cache: true
+    state: absent
+
+- name: Install flathub vscodium
+  ansible.builtin.command:
+    cmd: flatpak install --noninteractive flathub com.vscodium.codium
+  changed_when: false # subsequent changes, change nothing
 - name: Install python extension for vscodium
   become: true # for this, we really need to become root (to switch back to the user)
   become_user: user
   ansible.builtin.command:
-    cmd: "codium --install-extension {{ item }}"
+    cmd: "flatpak run com.vscodium.codium --install-extension {{ item }}"
   changed_when: false # ignore this change, ias we cannot check if the extension is already installed
   with_items:
     - ms-python.python
