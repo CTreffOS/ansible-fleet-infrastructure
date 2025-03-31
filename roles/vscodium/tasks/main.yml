@@ -1,6 +1,6 @@
 - name: Install vscodium repository signing key
   ansible.builtin.file:
-    url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+    path: /usr/share/keyrings/vscodium.gpg
     state: absent
 - name: Install vscodium repository
   ansible.builtin.file:
