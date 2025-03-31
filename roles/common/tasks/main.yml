@@ -1,12 +1,3 @@
-- name: Remove dvd-repository remains inside /etc/apt/sources.list
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list
-    regexp: "^(deb cdrom:.+)"
-    state: absent
-- name: Removed broken VSCodium repository
-  ansible.builtin.file:
-    path: /etc/apt/sources.list.d/vscodium.list
-    state: absent
 - name: Install basic packages
   ansible.builtin.apt:
     name: "{{ item }}"
